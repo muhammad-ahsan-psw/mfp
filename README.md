@@ -1,2 +1,2 @@
 # mfp
-Micro Frontends Overview App with Deployment to AWS
+Creating Micro FrontEnd Apps with Container App and Deploying to AWS
