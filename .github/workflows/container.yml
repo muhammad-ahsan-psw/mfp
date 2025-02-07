@@ -8,7 +8,7 @@ on:
       - 'packages/container/**'
 
 defaults:
-  run:
+  run:  
     working-directory: packages/container
 
 jobs:
@@ -16,13 +16,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2 #actions/checkout@v4
       - run: npm install
       - run: npm run build
 
-      - uses: shinyinc/action-aws-cli@v1.2
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+      - name: Configure AWS CLI
+        uses: shinyinc/action-aws-cli@v1.2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ""
+          AWS_DEFAULT_REGION: "" #${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
+
+      - name: Sync files to S3
+        run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "" #${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
+      # - uses: shinyinc/action-aws-cli@v1.2 #aws-actions/configure-aws-credentials@v2
+      # - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+      #   with:
+      #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #       AWS-REGION: "" #us-east-1  # Change this to your region
+      #   # env:
+      #   #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #   #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   #   AWS_DEFAULT_REGION: ""
