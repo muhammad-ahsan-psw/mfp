@@ -2,15 +2,18 @@ import React from 'react';
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
 import { StylesProvider } from '@material-ui/core/styles';
 import { MarketingApp } from './components/MarketingApp';
+import { Header } from './components/Header';
 
 export default () => {
     return (
-        <div>
-            <h2>
-                Welcome to Dashboard!
-            </h2>
-            <hr />
-            <MarketingApp></MarketingApp>
-        </div>
+        <BrowserRouter>
+            <div>
+                {/* <h2>
+                    Welcome to Dashboard!
+                </h2> */}
+                <Header />
+                <MarketingApp />
+            </div>
+        </BrowserRouter>
     );
 }
